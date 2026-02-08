@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Solo RPG Quest Generator</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #111;
+    color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    max-width: 700px;
+    background: #1e1e1e;
+    padding: 24px 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  button:hover {
+    background: #4338ca;
+  }
+  .result {
+    margin-top: 10px;
+    padding: 14px;
+    background: #0f172a;
+    border-radius: 8px;
+    border: 1px solid #334155;
+  }
+  .label {
+    font-weight: bold;
+    color: #a5b4fc;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Solo RPG Quest Helper</h1>
+  <button onclick="generate()">Generate Quest & Twist</button>
+
+  <div class="result">
+    <div><span class="label">Quest:</span> <span id="quest"></span></div>
+    <br />
+    <div><span class="label">Twist:</span> <span id="twist"></span></div>
+  </div>
+</div>
+
+<script>
+const quests = [
+  "Retrieve a stolen relic from a ruined temple.",
+  "Escort a mysterious traveler through dangerous lands.",
+  "Investigate strange lights in an abandoned village.",
+  "Slay a monster terrorizing a farming community.",
+  "Deliver an urgent message to a distant noble.",
+  "Explore a newly uncovered ancient dungeon.",
+  "Protect a caravan crossing a cursed desert.",
+  "Recover a lost heirloom for a grieving family.",
+  "Spy on a rival guild’s secret meeting.",
+  "Map an unexplored forest rumored to move.",
+  "Rescue prisoners from a bandit camp.",
+  "Find a cure for a spreading magical plague.",
+  "Negotiate peace between feuding clans.",
+  "Hunt a legendary beast for its rare components.",
+  "Find a missing scholar researching forbidden magic.",
+  "Guard a sacred ritual site overnight.",
+  "Retrieve a tome from a forbidden library.",
+  "Smuggle contraband past a city blockade.",
+  "Test a prototype magical artifact.",
+  "Investigate a haunted lighthouse.",
+  "Break a siege by sabotaging enemy supplies.",
+  "Find the source of a poisoned river.",
+  "Collect rare herbs from a dangerous swamp.",
+  "Deliver tribute to a dragon overlord.",
+  "Protect a royal heir during a festival.",
+  "Find a hidden rebel base.",
+  "Steal a gem from a heavily guarded vault.",
+  "Track down a runaway magical construct.",
+  "Solve a murder in a small town.",
+  "Explore floating ruins in the sky.",
+  "Retrieve a sword from a lake spirit.",
+  "Investigate prophetic dreams spreading among villagers.",
+  "Guard a prisoner on the way to trial.",
+  "Break a curse on a noble family.",
+  "Escort refugees through monster territory.",
+  "Find an ancient map rumored to show treasure.",
+  "Infiltrate a cult disguised as a charity.",
+  "Investigate strange mutations in wildlife.",
+  "Deliver medicine through a war zone.",
+  "Stop a ritual to summon a demon.",
+  "Find a missing child in a fairy forest.",
+  "Recover artifacts from a battlefield.",
+  "Explore a city buried in sand.",
+  "Protect a ship from sea monsters.",
+  "Investigate whispers from an ancient well.",
+  "Retrieve taxes stolen by thieves.",
+  "Guard a traveling bard with dangerous secrets.",
+  "Test a new experimental spell.",
+  "Investigate a portal that appeared overnight.",
+  "Hunt down a shapeshifter impostor.",
+  "Deliver a royal wedding invitation.",
+  "Scout enemy territory for troop movements.",
+  "Stop smugglers in the sewers.",
+  "Retrieve stolen livestock from goblins.",
+  "Investigate a cursed painting.",
+  "Find a hidden shrine in the mountains.",
+  "Negotiate trade with an isolated tribe.",
+  "Rescue a trapped miner in a collapsed tunnel.",
+  "Protect a wizard during a dangerous experiment.",
+  "Find a legendary blacksmith.",
+  "Recover a lost airship.",
+  "Deliver a prophetic scroll.",
+  "Investigate a time anomaly.",
+  "Track a runaway apprentice mage.",
+  "Stop an assassination attempt.",
+  "Guard a mysterious egg.",
+  "Explore a mirror realm.",
+  "Collect debts for a guild.",
+  "Find a lost city underwater.",
+  "Investigate a famine’s supernatural cause.",
+  "Retrieve a demon-bound artifact.",
+  "Break into a rival noble’s estate.",
+  "Guard a cursed caravan.",
+  "Find a missing deity’s shrine.",
+  "Hunt a serial killer in a city.",
+  "Explore a living dungeon.",
+  "Escort a prisoner to exile.",
+  "Recover a lost crown.",
+  "Investigate rumors of immortality.",
+  "Deliver a talking sword.",
+  "Protect a village from fae.",
+  "Investigate a wizard tower collapse.",
+  "Retrieve a dragon egg.",
+  "Find a stolen spellbook.",
+  "Stop a reality-warping artifact.",
+  "Explore a time-frozen battlefield.",
+  "Deliver a dangerous prophecy.",
+  "Investigate disappearing travelers.",
+  "Guard a cursed royal treasure.",
+  "Find a ghost’s lost remains.",
+  "Recover stolen holy relics.",
+  "Explore a mechanical city.",
+  "Deliver a message to the dead.",
+  "Hunt an escaped demon.",
+  "Find a missing pirate captain.",
+  "Explore a forbidden continent.",
+  "Protect a festival from sabotage.",
+  "Investigate a sentient storm.",
+  "Retrieve a heartstone from a mountain.",
+  "Break into a dragon’s dream.",
+  "Find the last unicorn."
+];
+
+const twists = [
+  "The quest giver is secretly the villain.",
+  "The target is innocent and framed.",
+  "The quest is a test by a hidden organization.",
+  "The item is sentient and manipulative.",
+  "Completing the quest will cause a disaster elsewhere.",
+  "A rival adventurer is pursuing the same goal.",
+  "The enemy is a future version of the player.",
+  "The monster is protecting something sacred.",
+  "The reward is cursed.",
+  "The location shifts through dimensions.",
+  "Time loops each time the quest fails.",
+  "The quest giver is under mind control.",
+  "The relic is a prison for a god.",
+  "The mission is part of a prophecy.",
+  "The target wants to die for a reason.",
+  "The client cannot be trusted to pay.",
+  "The quest is illegal but morally right.",
+  "A deity is secretly observing.",
+  "The area is a living organism.",
+  "The quest changes the player’s memories.",
+  "The villain is a sympathetic hero.",
+  "The reward is a trap.",
+  "The quest is staged for political theater.",
+  "The target is already dead.",
+  "The monster is the last of its kind.",
+  "The client is immortal and bored.",
+  "The artifact erases itself from history.",
+  "The quest is a dream—but has consequences.",
+  "The enemy wants to hire the player.",
+  "The quest is a ritual to summon the player.",
+  "The villain is controlled by a child.",
+  "The quest giver is a ghost.",
+  "The target is a future ally.",
+  "The quest must fail to succeed.",
+  "Reality glitches during the mission.",
+  "The quest is a divine punishment.",
+  "The reward is knowledge, not gold.",
+  "The location exists only at night.",
+  "The quest reveals a hidden world layer.",
+  "The enemy is a past version of the player.",
+  "The artifact rewrites fate.",
+  "The quest giver is a clone.",
+  "The target can only be harmed by kindness.",
+  "The mission is a distraction.",
+  "The world resets after completion.",
+  "The villain is the player’s descendant.",
+  "The reward is a cursed title.",
+  "The target is a living city.",
+  "The quest is a cosmic joke.",
+  "The client is an animal in disguise.",
+  "The target is a deity in exile.",
+  "The enemy is a misunderstood guardian.",
+  "The quest is a political scandal.",
+  "The artifact chooses its wielder.",
+  "The mission breaks a sacred taboo.",
+  "The quest is part of a reality show.",
+  "The world is simulated.",
+  "The quest giver is the player in disguise.",
+  "The reward changes the past.",
+  "The target is a metaphor made real.",
+  "The villain wants redemption.",
+  "The quest is a divine test of mercy.",
+  "The area is slowly vanishing.",
+  "The mission awakens an ancient horror.",
+  "The reward is a cursed prophecy.",
+  "The quest is illegal in every nation.",
+  "The target is a cursed hero.",
+  "The client is a demon with rules.",
+  "The mission is a cosmic balance correction.",
+  "The artifact is a fragment of reality.",
+  "The quest is narrated by an unseen storyteller.",
+  "The villain is controlled by a parasite.",
+  "The target is an illusion with real effects.",
+  "The quest is a time traveler’s prank.",
+  "The reward makes the player famous.",
+  "The mission triggers a war.",
+  "The quest giver is a god in disguise.",
+  "The target is a portal to elsewhere.",
+  "The enemy wants to be defeated.",
+  "The quest erases someone from existence.",
+  "The reward is forbidden knowledge.",
+  "The mission changes the genre of reality.",
+  "The quest is part of a cosmic bet.",
+  "The villain is the setting itself.",
+  "The target is a living concept.",
+  "The quest giver is lying about everything.",
+  "The mission traps the player in a story.",
+  "The reward is a new identity.",
+  "The target is the player’s past.",
+  "The quest is a ritual for immortality.",
+  "The villain is a corrupted deity.",
+  "The area is a dream of a giant.",
+  "The quest giver is possessed.",
+  "The reward is a curse disguised as a blessing.",
+  "The quest is watched by an audience beyond reality.",
+  "The target is a fragment of the player’s soul.",
+  "The mission destabilizes magic itself.",
+  "The reward is eternal servitude.",
+  "The villain is a misunderstood god.",
+  "The quest resets reality.",
+  "The target is the world’s core.",
+  "The quest is part of an endless cycle."
+];
+
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generate() {
+  document.getElementById("quest").textContent = randomFrom(quests);
+  document.getElementById("twist").textContent = randomFrom(twists);
+}
+</script>
+</body>
+</html>
